@@ -28,25 +28,104 @@
  * Start Helper Functions
  *
  */
+function getAllSection() {
+  const sections = document.querySelectorAll("section");
+  if (sections) {
+    const sectionAtr = Array.from(sections).map((el) => {
+      return {
+        id: el.id,
+        name: el.getAttribute("data-nav"),
+      };
+    });
 
+    return sectionAtr;
+  }
+  return [];
+}
+
+function createMenuLink(id, name) {
+  const liEl = document.createElement("li");
+  const aEl = document.createElement("a");
+
+  aEl.textContent = name;
+  // aEl.href = `#${id}`;
+  aEl.classList.add("menu__link");
+  aEl.setAttribute("data-nav", id);
+
+  aEl.addEventListener("click", handleClick);
+
+  liEl.appendChild(aEl);
+
+  return liEl;
+}
+
+function handleClick(event) {
+  const target = event.target;
+  console.log({ target });
+
+  const dataNav = target.attributes["data-nav"].value;
+
+  if (dataNav) {
+    scrollIntoView(dataNav);
+  }
+}
+
+function scrollIntoView(id) {
+  const view = document.getElementById(id);
+  view.scrollIntoView({
+    behavior: "smooth",
+  });
+}
+
+function scrollEvent(e) {
+  // get all sections on the page
+  const sections = document.querySelectorAll("section");
+
+  // loop through each section
+  sections.forEach((section) => {
+    // get px distance from top
+    const topDistance = section.getBoundingClientRect().top;
+
+    // if the distance to the top is between 0-100px
+    if (topDistance > 0 && topDistance < 100) {
+      section.classList.add("active");
+
+      // otherwise, remove the class
+    } else {
+      section.classList.remove("active");
+    }
+  });
+}
 /**
  * End Helper Functions
  * Begin Main Functions
  *
  */
 
-// build the nav
+function main() {
+  // build the nav
+  const allSections = getAllSection();
+  const navbarList = document.getElementById("navbar__list");
 
-// Add class 'active' to section when near top of viewport
+  allSections.forEach((item) => {
+    const liE = createMenuLink(item.id, item.name);
+    navbarList.appendChild(liE);
+  });
 
-// Scroll to anchor ID using scrollTO event
+  // Add class 'active' to section when near top of viewport
 
+  window.addEventListener("scroll", scrollEvent);
+
+  // Scroll to anchor ID using scrollTO event
+  scrollIntoView("section3");
+}
 /**
  * End Main Functions
  * Begin Events
  *
  */
 
+window.addEventListener("DOMContentLoaded", main());
 // Build menu
 
 // Scroll to section on link click
