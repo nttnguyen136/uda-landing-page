@@ -22,7 +22,7 @@
  * Define Global Variables
  *
  */
-
+const navList = document.getElementById("navbar__list");
 /**
  * End Global Variables
  * Start Helper Functions
@@ -48,7 +48,6 @@ function createMenuLink(id, name) {
   const aEl = document.createElement("a");
 
   aEl.textContent = name;
-  // aEl.href = `#${id}`;
   aEl.classList.add("menu__link");
   aEl.setAttribute("data-nav", id);
 
@@ -61,8 +60,6 @@ function createMenuLink(id, name) {
 
 function handleClick(event) {
   const target = event.target;
-  console.log({ target });
-
   const dataNav = target.attributes["data-nav"].value;
 
   if (dataNav) {
@@ -74,25 +71,38 @@ function scrollIntoView(id) {
   const view = document.getElementById(id);
   view.scrollIntoView({
     behavior: "smooth",
+    block: "center",
   });
 }
 
-function scrollEvent(e) {
+function scrollEvent(_) {
   // get all sections on the page
+
   const sections = document.querySelectorAll("section");
 
   // loop through each section
   sections.forEach((section) => {
-    // get px distance from top
-    const topDistance = section.getBoundingClientRect().top;
+    const { top, height } = section.getBoundingClientRect();
 
-    // if the distance to the top is between 0-100px
-    if (topDistance > 0 && topDistance < 100) {
+    if (top > 0 && top <= height) {
+      activeClass(section.id);
       section.classList.add("active");
-
-      // otherwise, remove the class
     } else {
       section.classList.remove("active");
+    }
+  });
+}
+
+function activeClass(data) {
+  const menuLinkList = document.getElementsByClassName("menu__link");
+
+  Array.from(menuLinkList).forEach((menu) => {
+    const dataNav = menu.attributes["data-nav"].value;
+
+    if (dataNav == data) {
+      menu.classList.add("active");
+    } else {
+      menu.classList.remove("active");
     }
   });
 }
@@ -113,11 +123,9 @@ function main() {
   });
 
   // Add class 'active' to section when near top of viewport
-
   window.addEventListener("scroll", scrollEvent);
 
   // Scroll to anchor ID using scrollTO event
-  scrollIntoView("section3");
 }
 /**
  * End Main Functions
