@@ -22,7 +22,7 @@
  * Define Global Variables
  *
  */
-const navList = document.getElementById("navbar__list");
+
 /**
  * End Global Variables
  * Start Helper Functions
@@ -44,21 +44,23 @@ function getAllSection() {
 }
 
 function createMenuLink(id, name) {
-  const liEl = document.createElement("li");
-  const aEl = document.createElement("a");
+  const liTag = document.createElement("li");
+  const aTag = document.createElement("a");
 
-  aEl.textContent = name;
-  aEl.classList.add("menu__link");
-  aEl.setAttribute("data-nav", id);
+  aTag.textContent = name;
+  aTag.classList.add("menu__link");
+  aTag.setAttribute("data-nav", id);
 
-  aEl.addEventListener("click", handleClick);
+  aTag.addEventListener("click", handleClick);
 
-  liEl.appendChild(aEl);
+  liTag.appendChild(aTag);
 
-  return liEl;
+  return liTag;
 }
 
 function handleClick(event) {
+  event.preventDefault();
+
   const target = event.target;
   const dataNav = target.attributes["data-nav"].value;
 
@@ -75,9 +77,7 @@ function scrollIntoView(id) {
   });
 }
 
-function scrollEvent(_) {
-  // get all sections on the page
-
+function updateActiveSection() {
   const sections = document.querySelectorAll("section");
 
   // loop through each section
@@ -91,6 +91,11 @@ function scrollEvent(_) {
       section.classList.remove("active");
     }
   });
+}
+
+function scrollEvent(_) {
+  // get all sections on the page
+  updateActiveSection();
 }
 
 function activeClass(data) {
@@ -123,9 +128,11 @@ function main() {
   });
 
   // Add class 'active' to section when near top of viewport
-  window.addEventListener("scroll", scrollEvent);
+  // Update 'active' section the first time
+  updateActiveSection();
 
   // Scroll to anchor ID using scrollTO event
+  window.addEventListener("scroll", scrollEvent);
 }
 /**
  * End Main Functions
@@ -134,8 +141,3 @@ function main() {
  */
 
 window.addEventListener("DOMContentLoaded", main());
-// Build menu
-
-// Scroll to section on link click
-
-// Set sections as active

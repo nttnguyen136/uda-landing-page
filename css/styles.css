@@ -71,6 +71,8 @@ section {
   text-align: right;
 
   display: flex;
+  flex-direction: column;
+
   justify-content: space-between;
 }
 
@@ -104,6 +106,7 @@ section {
 
   .navbar__menu ul {
     justify-content: flex-end;
+    flex-direction: row;
   }
 }
 
@@ -234,6 +237,10 @@ section.active {
 section.active .landing__container::before {
   opacity: 1;
   animation: rotate 4s linear 0s infinite forwards;
+}
+
+section.active h2 {
+  color: #cc1;
 }
 
 section.active .landing__container::after {
